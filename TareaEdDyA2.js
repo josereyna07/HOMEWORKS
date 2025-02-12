@@ -42,7 +42,7 @@ console.log(numbers); // [1, 0, 0, 5, 99]
 numbers.copyWithin(1, 3, 5);
 console.log(numbers); // [1, 5, 99, 5, 99]
 
-// 2️) Métodos de acceso (no modifican el array)
+// 2) Métodos de acceso (no modifican el array)
 
 // concat(): Combina arrays
 const combined = numbers.concat(words);
@@ -66,7 +66,7 @@ console.log(numbers.slice(1, 3)); // [5, 99]
 // toString(): Convierte el array en string
 console.log(numbers.toString()); // "1,5,99,5,99"
 
-// 3️) Métodos de iteración (devuelven un nuevo array)
+// 3) Métodos de iteración (devuelven un nuevo array)
 
 // map(): Transforma cada elemento
 const squared = numbers.map(num => num * num);
@@ -95,7 +95,7 @@ console.log(numbers.every(num => num > 0)); // true
 // some(): Verifica si al menos un elemento cumple la condición
 console.log(numbers.some(num => num < 0)); // false
 
-// 4️) Métodos avanzados
+// 4) Métodos avanzados
 
 // flat(): Aplana un array de arrays
 const nestedArray = [1, [2, 3], [4, [5, 6]]];
