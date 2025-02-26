@@ -1,5 +1,6 @@
 import { useState } from "react";
-import CategoryInput from "./assets/CategoryInput";
+import CategoryInput from "./CategoryInput";
+
 
 function App() {
   const [categories, setCategories] = useState([]);
