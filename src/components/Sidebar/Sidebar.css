@@ -1,0 +1,56 @@
+.sidebar {
+  width: 250px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  padding: 1rem 0;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.menu-item {
+  width: 100%;
+}
+
+.menu-title {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.menu-title:hover {
+  background-color: #2a2a2a;
+}
+
+.menu-title.has-children {
+  position: relative;
+}
+
+.menu-title .arrow {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.submenu {
+  background-color: #232323;
+}
+
+.submenu .menu-item {
+  padding-left: 1rem;
+}
+
+.menu-title.open {
+  background-color: #2a2a2a;
+}
+
+/* Selected state */
+.menu-title.selected {
+  background-color: #3a3a3a;
+}
+
+/* Active menu item (Security & Privacy in the example) */
+.menu-title.active {
+  background-color: #0066cc;
+}
