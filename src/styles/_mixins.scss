@@ -1,0 +1,308 @@
+@use 'sass:math';
+@use 'variables' as *;
+
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-column-center {
+  @include flex-column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-lg;
+  border: none;
+  border-radius: $radius-md;
+  font-family: $font-family-primary;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: all $transition-normal;
+  text-decoration: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left $transition-slow;
+  }
+
+  &:hover:not(:disabled)::before {
+    left: 100%;
+  }
+}
+
+@mixin button-primary {
+  @include button-base;
+  background: $primary-gradient;
+  color: white;
+  box-shadow: $shadow-md;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg, $shadow-glow;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+  background: $bg-card;
+  color: $text-primary;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+@mixin button-success {
+  @include button-base;
+  background: $success-gradient;
+  color: white;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg, 0 0 20px rgba(74, 222, 128, 0.4);
+  }
+}
+
+@mixin button-error {
+  @include button-base;
+  background: $error-gradient;
+  color: white;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg, 0 0 20px rgba(239, 68, 68, 0.4);
+  }
+}
+
+
+@mixin input-base {
+  padding: $spacing-sm $spacing-md;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: $radius-md;
+  background: $bg-card;
+  color: $text-primary;
+  font-family: $font-family-primary;
+  font-size: $font-size-sm;
+  backdrop-filter: blur(10px);
+  transition: all $transition-normal;
+  outline: none;
+
+  &::placeholder {
+    color: $text-muted;
+  }
+
+  &:focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+
+@mixin card-base {
+  background: $bg-card;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: $radius-lg;
+  backdrop-filter: blur(20px);
+  box-shadow: $shadow-lg;
+  transition: all $transition-normal;
+}
+
+@mixin card-hover {
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-xl;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+
+@mixin glass-morphism($opacity: 0.1) {
+  background: rgba(255, 255, 255, $opacity);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+@mixin gradient-text($gradient: $primary-gradient) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+
+@mixin mobile {
+  @media (max-width: #{$breakpoint-sm - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-sm}) and (max-width: #{$breakpoint-lg - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
+
+@mixin mobile-up {
+  @media (min-width: #{$breakpoint-sm}) {
+    @content;
+  }
+}
+
+@mixin tablet-up {
+  @media (min-width: #{$breakpoint-md}) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
+
+
+@mixin fade-in($duration: $duration-normal) {
+  animation: fadeIn $duration ease-in-out;
+}
+
+@mixin slide-in-up($duration: $duration-normal) {
+  animation: slideInUp $duration ease-out;
+}
+
+@mixin slide-in-down($duration: $duration-normal) {
+  animation: slideInDown $duration ease-out;
+}
+
+@mixin bounce-in($duration: $duration-slow) {
+  animation: bounceIn $duration ease-out;
+}
+
+@mixin pulse($duration: 2s) {
+  animation: pulse $duration ease-in-out infinite;
+}
+
+
+@mixin loading-spinner($size: 20px, $color: $primary-color) {
+  width: $size;
+  height: $size;
+  border: 2px solid rgba($color, 0.3);
+  border-top: 2px solid $color;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+@mixin truncate-lines($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+@mixin custom-scrollbar($width: 8px, $track-color: transparent, $thumb-color: rgba(255, 255, 255, 0.3)) {
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+    border-radius: $radius-full;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+
+@mixin focus-ring($color: $primary-color) {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba($color, 0.3);
+}
+
+
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+  
+  &::before {
+    content: '';
+    display: block;
+    padding-top: percentage($height / $width);
+  }
+  
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

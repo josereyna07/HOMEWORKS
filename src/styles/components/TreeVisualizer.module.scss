@@ -1,0 +1,617 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+@use '../functions' as *;
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+  }
+}
+
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $bg-primary 0%, $bg-secondary 50%, $bg-tertiary 100%);
+  background-attachment: fixed;
+  padding: $spacing-xl;
+  font-family: $font-family-primary;
+  color: $text-primary;
+  position: relative;
+  overflow-x: auto;
+
+  
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(240, 147, 251, 0.05) 0%, transparent 50%);
+    animation: float 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @include mobile {
+    padding: $spacing-lg;
+  }
+}
+
+
+.header {
+  text-align: center;
+  margin-bottom: $spacing-3xl;
+  @include fade-in($duration-slow);
+
+  .title {
+    font-size: clamp(1.875rem, 4vw, 2.25rem);
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-md;
+    @include gradient-text($primary-gradient);
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-size: $font-size-lg;
+    color: $text-secondary;
+    font-weight: $font-weight-normal;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
+
+
+.controls {
+  @include flex-column;
+  gap: $spacing-xl;
+  margin-bottom: $spacing-3xl;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include tablet-up {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+  }
+}
+
+
+.controlGroup {
+  @include card-base;
+  padding: $spacing-xl;
+  @include slide-in-up($duration-normal);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: $primary-gradient;
+  }
+
+  .groupTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-lg;
+    color: $text-primary;
+    @include flex-center;
+    gap: $spacing-sm;
+
+    &::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: $primary-gradient;
+      border-radius: $radius-full;
+      animation: pulse 2s ease-in-out infinite;
+    }
+  }
+
+  .inputGroup {
+    @include flex-column;
+    gap: $spacing-md;
+
+    @include mobile-up {
+      flex-direction: row;
+      align-items: flex-end;
+    }
+  }
+
+  .input {
+    @include input-base;
+    flex: 1;
+    min-width: 0;
+    font-family: $font-family-mono;
+    font-size: $font-size-base;
+
+    &:focus {
+      transform: translateY(-2px);
+    }
+  }
+
+  .button {
+    @include button-primary;
+    min-width: 120px;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      animation: glow 2s ease-in-out infinite;
+    }
+  }
+
+  .searchButton {
+    @include button-secondary;
+    min-width: 120px;
+  }
+}
+
+
+.errorMessage {
+  @include slide-in-down($duration-fast);
+  background: $error-gradient;
+  color: white;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  margin-top: $spacing-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  box-shadow: $shadow-lg;
+  position: relative;
+
+  &::before {
+    content: '⚠';
+    margin-right: $spacing-sm;
+    font-size: $font-size-lg;
+  }
+}
+
+
+.searchResult {
+  @include bounce-in($duration-normal);
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  margin-top: $spacing-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  box-shadow: $shadow-md;
+
+  &.found {
+    background: $success-gradient;
+    color: white;
+
+    &::before {
+      content: '✓';
+      margin-right: $spacing-sm;
+      font-size: $font-size-lg;
+    }
+  }
+
+  &.notFound {
+    background: $warning-color;
+    color: white;
+
+    &::before {
+      content: '✗';
+      margin-right: $spacing-sm;
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+
+.traversals {
+  @include card-base;
+  @include card-hover;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-xl;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  @include slide-in-up($duration-slow);
+
+  .traversalsTitle {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-lg;
+    @include gradient-text($accent-gradient);
+    text-align: center;
+  }
+
+  .traversalsList {
+    @include flex-column;
+    gap: $spacing-lg;
+
+    @include tablet-up {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: $spacing-xl;
+    }
+  }
+
+  .traversalItem {
+    @include glass-morphism(0.05);
+    padding: $spacing-lg;
+    border-radius: $radius-lg;
+    transition: all $transition-normal;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: $primary-gradient;
+      transform: scaleX(0);
+      transition: transform $transition-normal;
+    }
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: $shadow-xl;
+
+      &::before {
+        transform: scaleX(1);
+      }
+    }
+
+    .traversalLabel {
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-sm;
+      font-size: $font-size-base;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .traversalValues {
+      font-family: $font-family-mono;
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      line-height: 1.6;
+      word-break: break-all;
+      padding: $spacing-sm;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: $radius-sm;
+      border-left: 3px solid $primary-color;
+
+      &:empty::after {
+        content: 'No values yet...';
+        color: $text-muted;
+        font-style: italic;
+      }
+    }
+  }
+}
+
+
+.treeContainer {
+  @include card-base;
+  @include card-hover;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-xl;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  @include slide-in-up($duration-slower);
+  position: relative;
+
+  .treeTitle {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-lg;
+    @include gradient-text($primary-gradient);
+    text-align: center;
+  }
+
+  .treeWrapper {
+    height: 500px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: $radius-lg;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+    position: relative;
+    overflow: hidden;
+    @include custom-scrollbar();
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 25% 25%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    &:empty::after {
+      content: 'Insert numbers to see the tree visualization';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: $text-muted;
+      font-size: $font-size-lg;
+      font-style: italic;
+      text-align: center;
+      z-index: 2;
+    }
+
+   
+    :global {
+      .rd3t-tree-container {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .rd3t-node {
+        cursor: pointer;
+
+        circle {
+          fill: $primary-color !important;
+          stroke: $accent-color !important;
+          stroke-width: 3px !important;
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) !important;
+          transition: all $transition-normal !important;
+
+          &:hover {
+            fill: $accent-color !important;
+            stroke: $primary-color !important;
+            transform: scale(1.1) !important;
+          }
+        }
+
+        text {
+          fill: white !important;
+          font-family: $font-family-mono !important;
+          font-weight: $font-weight-bold !important;
+          font-size: 14px !important;
+          text-anchor: middle !important;
+          dominant-baseline: central !important;
+          pointer-events: none !important;
+        }
+      }
+
+      .rd3t-link {
+        stroke: rgba(255, 255, 255, 0.6) !important;
+        stroke-width: 2px !important;
+        fill: none !important;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) !important;
+        transition: all $transition-normal !important;
+
+        &:hover {
+          stroke: $accent-color !important;
+          stroke-width: 3px !important;
+        }
+      }
+
+      .rd3t-leaf-node {
+        circle {
+          fill: $success-color !important;
+        }
+      }
+    }
+
+    @include mobile {
+      height: 400px;
+    }
+  }
+}
+
+
+.loading {
+  @include flex-center;
+  height: 200px;
+  
+  .spinner {
+    @include loading-spinner(40px, $primary-color);
+  }
+}
+
+
+.emptyState {
+  @include flex-column-center;
+  padding: $spacing-3xl;
+  text-align: center;
+  color: $text-muted;
+
+  .emptyIcon {
+    font-size: 4rem;
+    margin-bottom: $spacing-lg;
+    opacity: 0.5;
+  }
+
+  .emptyText {
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-sm;
+  }
+
+  .emptySubtext {
+    font-size: $font-size-sm;
+    opacity: 0.7;
+  }
+}
+
+
+@include mobile {
+  .container {
+    padding: $spacing-md;
+  }
+
+  .controls {
+    gap: $spacing-lg;
+  }
+
+  .controlGroup {
+    padding: $spacing-lg;
+
+    .inputGroup {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .traversals {
+    padding: $spacing-lg;
+
+    .traversalsList {
+      gap: $spacing-lg;
+    }
+  }
+
+  .treeContainer {
+    padding: $spacing-lg;
+  }
+}
+
+
+@media (prefers-contrast: high) {
+  .container {
+    background: #000;
+    color: #fff;
+  }
+
+  .controlGroup,
+  .traversals,
+  .treeContainer {
+    border: 2px solid #fff;
+    background: #111;
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+@media print {
+  .container {
+    background: white !important;
+    color: black !important;
+  }
+
+  .controlGroup {
+    display: none !important;
+  }
+
+  .treeContainer {
+    border: 1px solid black !important;
+    background: white !important;
+  }
+}

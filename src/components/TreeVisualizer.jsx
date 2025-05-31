@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Tree from 'react-d3-tree';
+import styles from '../styles/components/TreeVisualizer.module.scss';
+
 
 class TreeNode {
   constructor(value) {
@@ -163,47 +165,91 @@ function TreeVisualizer() {
   };
 
   return (
-    <div style={{ height: '100vh', padding: '20px' }}>
-      <div style={{ marginBottom: '20px' }}>
-        <input
-          type="number"
-          value={newValue}
-          onChange={(e) => setNewValue(e.target.value)}
-          placeholder="Enter number to insert"
-        />
-        <button onClick={handleInsert}>Insert</button>
-        {insertError && <p style={{ color: 'red', marginTop: '5px' }}>{insertError}</p>}
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Binary Tree Visualizer</h1>
+        <p className={styles.subtitle}>
+          Insert numbers to create a binary search tree and visualize its structure.
+          Search for values and explore different tree traversal methods.
+        </p>
+      </header>
+
+      <div className={styles.controls}>
+        <div className={styles.controlGroup}>
+          <h2 className={styles.groupTitle}>Insert Node</h2>
+          <div className={styles.inputGroup}>
+            <input
+              type="number"
+              className={styles.input}
+              value={newValue}
+              onChange={(e) => setNewValue(e.target.value)}
+              placeholder="Enter number to insert"
+            />
+            <button className={styles.button} onClick={handleInsert}>
+              Insert
+            </button>
+          </div>
+          {insertError && <p className={styles.errorMessage}>{insertError}</p>}
+        </div>
+
+        <div className={styles.controlGroup}>
+          <h2 className={styles.groupTitle}>Search Node</h2>
+          <div className={styles.inputGroup}>
+            <input
+              type="number"
+              className={styles.input}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Enter number to search"
+            />
+            <button className={styles.searchButton} onClick={handleSearch}>
+              Search
+            </button>
+          </div>
+          {searchResult && (
+            <p className={`${styles.searchResult} ${searchResult.includes('found') ? styles.found : styles.notFound}`}>
+              {searchResult}
+            </p>
+          )}
+        </div>
       </div>
 
-      <div style={{ marginBottom: '20px' }}>
-        <input
-          type="number"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          placeholder="Enter number to search"
-        />
-        <button onClick={handleSearch}>Search</button>
-        {searchResult && <p>{searchResult}</p>}
-      </div>
+      <section className={styles.traversals}>
+        <h2 className={styles.traversalsTitle}>Tree Traversals</h2>
+        <div className={styles.traversalsList}>
+          <div className={styles.traversalItem}>
+            <h3 className={styles.traversalLabel}>Inorder</h3>
+            <p className={styles.traversalValues}>{tree.inorder().join(' → ')}</p>
+          </div>
+          <div className={styles.traversalItem}>
+            <h3 className={styles.traversalLabel}>Preorder</h3>
+            <p className={styles.traversalValues}>{tree.preorder().join(' → ')}</p>
+          </div>
+          <div className={styles.traversalItem}>
+            <h3 className={styles.traversalLabel}>Postorder</h3>
+            <p className={styles.traversalValues}>{tree.postorder().join(' → ')}</p>
+          </div>
+        </div>
+      </section>
 
-      <div style={{ marginBottom: '20px' }}>
-        <h3>Tree Traversals:</h3>
-        <p><strong>Inorder:</strong> {tree.inorder().join(' → ')}</p>
-        <p><strong>Preorder:</strong> {tree.preorder().join(' → ')}</p>
-        <p><strong>Postorder:</strong> {tree.postorder().join(' → ')}</p>
-      </div>
-
-      <div style={{ height: '500px', border: '1px solid #ccc' }}>
-        {treeData && (
-          <Tree
-            data={treeData}
-            orientation="vertical"
-            pathFunc="step"
-            translate={{ x: 450, y: 50 }}
-            separation={{ siblings: 2, nonSiblings: 2 }}
-          />
-        )}
-      </div>
+      <section className={styles.treeContainer}>
+        <h2 className={styles.treeTitle}>Tree Visualization</h2>
+        <div className={styles.treeWrapper}>
+          {treeData && (
+            <Tree
+              data={treeData}
+              orientation="vertical"
+              pathFunc="step"
+              translate={{ x: 450, y: 50 }}
+              separation={{ siblings: 2, nonSiblings: 2 }}
+              nodeSize={{ x: 120, y: 100 }}
+              zoomable={true}
+              collapsible={false}
+              transitionDuration={500}
+            />
+          )}
+        </div>
+      </section>
     </div>
   );
 }

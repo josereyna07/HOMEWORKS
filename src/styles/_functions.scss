@@ -1,0 +1,173 @@
+@use 'sass:math';
+
+// Convert pixels to rem
+@function rem($pixels, $base: 16px) {
+  @return math.div($pixels, $base) * 1rem;
+}
+
+// Convert pixels to em
+@function em($pixels, $base: 16px) {
+  @return math.div($pixels, $base) * 1em;
+}
+
+// Calculate percentage
+@function percentage($value, $total) {
+  @return percentage(math.div($value, $total));
+}
+
+// Lighten color function
+@function lighten-color($color, $amount: 10%) {
+  @return lighten($color, $amount);
+}
+
+// Darken color function
+@function darken-color($color, $amount: 10%) {
+  @return darken($color, $amount);
+}
+
+// Alpha color function
+@function alpha-color($color, $alpha: 0.5) {
+  @return rgba($color, $alpha);
+}
+
+// Calculate contrast color (black or white)
+@function contrast-color($color) {
+  $lightness: lightness($color);
+  @if $lightness > 50% {
+    @return #000;
+  } @else {
+    @return #fff;
+  }
+}
+
+// Generate random color
+@function random-color() {
+  @return hsl(random(360), 50% + random(50%), 50% + random(25%));
+}
+
+// Strip units from a value
+@function strip-unit($value) {
+  @return math.div($value, ($value * 0 + 1));
+}
+
+// Power function
+@function pow($number, $exponent) {
+  $result: 1;
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $result: $result * $number;
+    }
+  } @else if $exponent < 0 {
+    @for $i from 1 through -$exponent {
+      $result: math.div($result, $number);
+    }
+  }
+  @return $result;
+}
+
+// Square root approximation
+@function sqrt($number) {
+  $guess: math.div($number, 2);
+  $root: $guess;
+  @for $i from 1 through 10 {
+    $root: math.div($root + math.div($number, $root), 2);
+  }
+  @return $root;
+}
+
+// Generate spacing scale
+@function spacing($multiplier: 1) {
+  @return 1rem * $multiplier;
+}
+
+// Generate font size scale
+@function font-scale($step: 0) {
+  $ratio: 1.25; // Major third
+  @return 1rem * pow($ratio, $step);
+}
+
+// Calculate golden ratio
+@function golden-ratio($value, $increment: 1) {
+  $golden: 1.618;
+  @return $value * pow($golden, $increment);
+}
+
+// Map deep get function
+@function map-deep-get($map, $keys...) {
+  @each $key in $keys {
+    $map: map-get($map, $key);
+  }
+  @return $map;
+}
+
+// Generate box shadow with multiple layers
+@function layered-shadow($layers: 3, $base-blur: 4px, $base-spread: 0px, $base-opacity: 0.1) {
+  $shadows: ();
+  @for $i from 1 through $layers {
+    $y-offset: $i * 2px;
+    $blur: $base-blur * $i;
+    $spread: $base-spread;
+    $opacity: math.div($base-opacity, $i);
+    $shadow: 0 #{$y-offset} #{$blur} #{$spread} rgba(0, 0, 0, $opacity);
+    $shadows: append($shadows, $shadow, comma);
+  }
+  @return $shadows;
+}
+
+// Generate gradient stops
+@function gradient-stops($color1, $color2, $stops: 5) {
+  $gradient: ();
+  @for $i from 0 through $stops {
+    $percentage: percentage(math.div($i, $stops));
+    $color: mix($color2, $color1, $percentage);
+    $stop: $color $percentage;
+    $gradient: append($gradient, $stop, comma);
+  }
+  @return $gradient;
+}
+
+// Generate animation delay
+@function stagger-delay($index, $base-delay: 0.1s) {
+  @return $base-delay * $index;
+}
+
+// Convert hex to RGB values
+@function hex-to-rgb($hex) {
+  @return red($hex), green($hex), blue($hex);
+}
+
+// Generate CSS custom property name
+@function css-var($name) {
+  @return var(--#{$name});
+}
+
+// Calculate optimal line height
+@function optimal-line-height($font-size) {
+  @if $font-size < 16px {
+    @return 1.6;
+  } @else if $font-size < 24px {
+    @return 1.5;
+  } @else {
+    @return 1.4;
+  }
+}
+
+// Generate modular scale
+@function modular-scale($step, $base: 1rem, $ratio: 1.25) {
+  @return $base * pow($ratio, $step);
+}
+
+// Calculate container width
+@function container-width($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @return 640px - 2rem;
+  } @else if $breakpoint == 'md' {
+    @return 768px - 2rem;
+  } @else if $breakpoint == 'lg' {
+    @return 1024px - 2rem;
+  } @else if $breakpoint == 'xl' {
+    @return 1280px - 2rem;
+  } @else {
+    @return 100%;
+  }
+}
